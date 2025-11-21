@@ -71,13 +71,13 @@ export const LoginPage = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Correo</FormLabel>
+                    <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <input
                         {...field}
                         type="email"
                         autoComplete="email"
-                        placeholder="correo@ejemplo.com"
+                        placeholder="Escribe tu correo electrónico"
                         className="field"
                         required
                       />
@@ -98,7 +98,7 @@ export const LoginPage = () => {
                         {...field}
                         type="password"
                         autoComplete="current-password"
-                        placeholder="Contraseña"
+                        placeholder="Escribe tu contraseña"
                         className="field"
                         required
                       />

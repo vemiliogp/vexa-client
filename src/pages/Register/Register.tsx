@@ -76,7 +76,7 @@ export const RegisterPage = () => {
                         {...field}
                         type="text"
                         autoComplete="name"
-                        placeholder="Tu nombre"
+                        placeholder="Escribe tu nombre"
                         className="field"
                       />
                     </FormControl>
@@ -90,13 +90,13 @@ export const RegisterPage = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Correo</FormLabel>
+                    <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <input
                         {...field}
                         type="email"
                         autoComplete="email"
-                        placeholder="correo@ejemplo.com"
+                        placeholder="Escribe tu correo electrónico"
                         className="field"
                         required
                       />
@@ -117,7 +117,7 @@ export const RegisterPage = () => {
                         {...field}
                         type="password"
                         autoComplete="new-password"
-                        placeholder="Crea tu contraseña"
+                        placeholder="Escribe tu contraseña"
                         className="field"
                         required
                       />
