@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: 'Lato', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: var(--text-main);
   background: #ffffff;
 }
