@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { Link } from "react-router"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -48,9 +49,9 @@ export const LoginPage = () => {
       </aside>
 
       <main className="panel-right">
-        <a href="/register" className="login-link">
+        <Link to="/register" className="login-link">
           Crear cuenta
-        </a>
+        </Link>
 
         <div className="w-full max-w-[380px] space-y-6">
           <div className="space-y-2">
