@@ -48,15 +48,15 @@ export const LoginPage = () => {
       </aside>
 
       <main className="panel-right">
-        <a href="register.html" className="login-link">
+        <a href="/register" className="login-link">
           Crear cuenta
         </a>
 
         <div className="w-full max-w-[380px] space-y-6">
           <div className="space-y-2">
-            <h1>Iniciar sesion</h1>
+            <h1>Iniciar sesión</h1>
             <p className="subtitle">
-              Ingresa tu correo y contrasena para continuar
+              Ingresa tu correo y contraseña para continuar
             </p>
           </div>
 
@@ -91,13 +91,13 @@ export const LoginPage = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contrasena</FormLabel>
+                    <FormLabel>Contraseña</FormLabel>
                     <FormControl>
                       <input
                         {...field}
                         type="password"
                         autoComplete="current-password"
-                        placeholder="Contrasena"
+                        placeholder="Contraseña"
                         className="field"
                         required
                       />
