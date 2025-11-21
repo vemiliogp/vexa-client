@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Separator } from "@/components/ui/separator"
 
 const loginSchema = z.object({
   email: z.string().email("Ingresa un correo valido"),
