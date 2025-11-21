@@ -42,10 +42,9 @@ export const LoginPage = () => {
 
         <div>
           <p className="quote">
-            "La curiosidad construye el futuro, y la IA es el copiloto que nos
-            recuerda que no existe pregunta pequena."
+            "Todo debe hacerse tan simple como sea posible, pero no más simple."
           </p>
-          <p className="author">John Smith</p>
+          <p className="author">Albert Einstein</p>
         </div>
       </aside>
 
@@ -118,13 +117,6 @@ export const LoginPage = () => {
               </Button>
             </form>
           </Form>
-
-          <Separator />
-
-          <p className="terms">
-            Al ingresar aceptas nuestros <a href="#">Terminos de servicio</a> y{" "}
-            <a href="#">Politicas de privacidad</a>.
-          </p>
         </div>
       </main>
     </div>
