@@ -12,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { useLogin } from "./useLogin"
 
 const loginSchema = z.object({
   email: z.string().email("Ingresa un correo valido"),
@@ -29,8 +30,10 @@ export const LoginPage = () => {
     },
   })
 
+  const { login, loginErrorMessage, isPending } = useLogin()
+
   const onSubmit = (values: LoginValues) => {
-    console.log("Login submit", values)
+    return login(values)
   }
 
   return (
@@ -111,10 +114,16 @@ export const LoginPage = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={form.formState.isSubmitting}
+                disabled={isPending}
               >
-                Ingresar
+                {isPending ? "Ingresando..." : "Ingresar"}
               </Button>
+
+              {loginErrorMessage ? (
+                <p className="text-sm text-red-600" role="alert">
+                  {loginErrorMessage}
+                </p>
+              ) : null}
             </form>
           </Form>
         </div>
