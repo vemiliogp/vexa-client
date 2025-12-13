@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Link } from "react-router"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Link } from "react-router";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,30 +11,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { useLogin } from "./useLogin"
+} from "@/components/ui/form";
+import { useLogin } from "./useLogin";
 
 const loginSchema = z.object({
-  email: z.string().email("Ingresa un correo valido"),
-  password: z.string().min(8, "La contrasena debe tener al menos 8 caracteres"),
-})
+  email: z.email({ message: "Ingresa un correo valido" }),
+  password: z
+    .string()
+    .min(8, { message: "La contrasena debe tener al menos 8 caracteres" }),
+});
 
-type LoginValues = z.infer<typeof loginSchema>
+type LoginValues = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  })
+  });
 
-  const { login, loginErrorMessage, isPending } = useLogin()
+  const { login, loginErrorMessage, isPending } = useLogin();
 
   const onSubmit = (values: LoginValues) => {
-    return login(values)
-  }
+    return login(values);
+  };
 
   return (
     <div className="page">
@@ -111,11 +109,7 @@ export const LoginPage = () => {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isPending}
-              >
+              <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? "Ingresando..." : "Ingresar"}
               </Button>
 
@@ -129,5 +123,5 @@ export const LoginPage = () => {
         </div>
       </main>
     </div>
-  )
-}
+  );
+};

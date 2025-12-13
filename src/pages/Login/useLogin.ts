@@ -14,8 +14,7 @@ export const useLogin = () => {
   });
 
   const loginErrorMessage =
-    mutation.error?.response?.data?.message ||
-    mutation.error?.response?.data?.detail ||
+    mutation.error?.response?.data?.error_message ||
     (mutation.error
       ? "No pudimos iniciar sesión. Inténtalo nuevamente."
       : null);

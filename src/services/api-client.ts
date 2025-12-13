@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export type ApiErrorResponse = {
-  message?: string;
-  detail?: string;
+  error_message?: string;
 };
 
 export const apiClient = axios.create({

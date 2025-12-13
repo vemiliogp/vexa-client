@@ -12,11 +12,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { useRegister } from "./useRegister"
 
 const registerSchema = z.object({
-  name: z.string().trim().optional(),
-  email: z.string().email("Ingresa un correo valido"),
-  password: z.string().min(8, "La contrasena debe tener al menos 8 caracteres"),
+  fullName: z.string().trim().optional(),
+  email: z.email({ message: "Ingresa un correo valido" }),
+  password: z.string().min(8, { message: "La contrasena debe tener al menos 8 caracteres" }),
 })
 
 type RegisterValues = z.infer<typeof registerSchema>
@@ -25,14 +26,16 @@ export const RegisterPage = () => {
   const form = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
       password: "",
     },
   })
 
+  const { register, registerErrorMessage, isPending } = useRegister()
+
   const onSubmit = (values: RegisterValues) => {
-    console.log("Register submit", values)
+    return register(values)
   }
 
   return (
@@ -67,7 +70,7 @@ export const RegisterPage = () => {
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="fullName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nombre (opcional)</FormLabel>
@@ -130,10 +133,16 @@ export const RegisterPage = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={form.formState.isSubmitting}
+                disabled={isPending}
               >
-                Registrarme
+                {isPending ? "Registrando..." : "Registrarme"}
               </Button>
+
+              {registerErrorMessage ? (
+                <p className="text-sm text-red-600" role="alert">
+                  {registerErrorMessage}
+                </p>
+              ) : null}
             </form>
           </Form>
         </div>
