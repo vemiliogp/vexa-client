@@ -9,47 +9,41 @@ import {
   EmptyTitle,
   EmptyDescription,
 } from "@/components/ui/empty";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useConnections } from "./useConnections";
 import { CreateConnectionDialog } from "./CreateConnectionDialog";
+import { ConnectionCard } from "./ConnectionCard";
+import { RecentConversations } from "@/pages/Conversations/RecentConversations";
+import { useConversations } from "@/pages/Conversations/useConversations";
 
 export function ConnectionsPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { connections, isLoading } = useConnections();
+  const { conversations } = useConversations();
 
   if (isLoading) {
     return (
       <div className="w-full">
-        <div className="flex justify-between items-center mb-6">
-          <Skeleton className="h-8 w-32" />
+        <div className="page-header">
+          <div className="page-header-content">
+            <Skeleton className="h-8 w-40 mb-2" />
+            <Skeleton className="h-5 w-64" />
+          </div>
           <Skeleton className="h-10 w-40" />
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Descripción</TableHead>
-              <TableHead>Motor</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {[1, 2, 3].map((i) => (
-              <TableRow key={i}>
-                <TableCell><Skeleton className="h-5 w-40" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-64" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-24" /></TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <div className="connections-grid">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="connection-card">
+              <div className="connection-card-header">
+                <Skeleton className="h-8 w-12" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+              <Skeleton className="h-5 w-32 mb-2" />
+              <Skeleton className="h-4 w-full mb-4" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -81,31 +75,24 @@ export function ConnectionsPage() {
   return (
     <>
       <div className="w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Conexiones</h1>
+        <div className="page-header">
+          <div className="page-header-content">
+            <h1>Conexiones</h1>
+            <p>Gestiona tus fuentes de datos distribuidas.</p>
+          </div>
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="size-4" />
             Nueva conexión
           </Button>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Descripción</TableHead>
-              <TableHead>Motor</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {connections.map((connection) => (
-              <TableRow key={connection.id}>
-                <TableCell className="font-medium">{connection.name}</TableCell>
-                <TableCell>{connection.description}</TableCell>
-                <TableCell>{connection.engine}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+
+        <div className="connections-grid">
+          {connections.map((connection) => (
+            <ConnectionCard key={connection.id} connection={connection} />
+          ))}
+        </div>
+
+        <RecentConversations conversations={conversations} />
       </div>
       <CreateConnectionDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </>

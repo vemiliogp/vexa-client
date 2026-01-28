@@ -1,33 +1,44 @@
 import { apiClient } from "./api-client";
 
-export type Connection = {
+export type ConnectionStatus = "active" | "standby" | "inactive";
+
+export interface Connection {
   id: number;
   name: string;
   description: string;
   engine: string;
-};
+  status?: ConnectionStatus;
+}
 
-export type CreateConnectionPayload = {
+export interface CreateConnectionPayload {
   name: string;
   description: string;
   engine: string;
   url: string;
-};
+}
 
-export type ConnectionResponse = {
+export interface ConnectionResponse {
   data: Connection;
-};
+}
 
-export type ConnectionsResponse = {
+export interface ConnectionsResponse {
   data: Connection[];
-};
+}
 
 export const createConnection = async (payload: CreateConnectionPayload) => {
-  const { data } = await apiClient.post<ConnectionResponse>("/connection", payload);
+  const { data } = await apiClient.post<ConnectionResponse>(
+    "/connection",
+    payload,
+  );
   return data;
 };
 
 export const getConnections = async () => {
   const { data } = await apiClient.get<ConnectionsResponse>("/connection");
+  return data;
+};
+
+export const deleteConnection = async (id: number) => {
+  const { data } = await apiClient.delete(`/connection/${id}`);
   return data;
 };

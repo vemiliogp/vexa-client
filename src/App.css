@@ -186,11 +186,44 @@ form {
 @media (max-width: 900px) {
   .page {
     flex-direction: column;
+    min-height: 100vh;
   }
 
   .panel-left {
-    flex-basis: auto;
-    padding: 18px 24px 24px;
+    flex: 0 0 auto;
+    padding: 20px 24px;
+    min-height: auto;
+  }
+
+  .quote,
+  .author {
+    display: none;
+  }
+
+  .panel-right {
+    flex: 1;
+    padding: 32px 24px 48px;
+    flex-direction: column;
+  }
+
+  .login-link {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-left {
+    padding: 16px 20px;
+  }
+
+  .brand {
+    font-size: 14px;
   }
 
   .panel-right {
@@ -198,13 +231,26 @@ form {
   }
 
   .login-link {
-    position: static;
-    display: inline-block;
-    margin-left: auto;
-    margin-bottom: 28px;
+    top: 16px;
+    right: 20px;
+    font-size: 12px;
   }
 
-  .card {
-    max-width: 100%;
+  h1 {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .field {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 10px 12px;
+    font-size: 14px;
   }
 }

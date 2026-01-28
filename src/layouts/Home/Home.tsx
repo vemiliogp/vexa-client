@@ -1,51 +1,66 @@
-import { Link, Outlet } from "react-router";
-import { LogOut, Cable, MessageSquare, Settings, User } from "lucide-react";
+import { Link, Outlet, useLocation } from "react-router";
+import { LogOut, Network, Sparkles, Zap, AudioLines } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import "./Home.css";
 
-function FloatingMenu() {
+const navItems = [
+  { to: "/connections", icon: Network, label: "Conexiones" },
+  { to: "/conversations", icon: AudioLines, label: "Conversaciones" },
+  { to: "/insights", icon: Sparkles, label: "Insights" }
+];
+
+function Sidebar() {
+  const location = useLocation();
+
   return (
-    <nav className="floating-menu">
-      <Link to="/connections">
-        <Button variant="ghost" size="icon" className="floating-menu-item">
-          <Cable className="size-5" />
+    <aside className="sidebar">
+      <div className="sidebar-header">
+        <div className="sidebar-logo">
+          <Zap className="size-5" />
+        </div>
+      </div>
+
+      <nav className="sidebar-nav">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.to;
+          return (
+            <Link key={item.to} to={item.to}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`sidebar-item ${isActive ? "sidebar-item-active" : ""}`}
+                title={item.label}
+              >
+                <item.icon className="size-5" />
+              </Button>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="sidebar-footer">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="sidebar-item sidebar-item-logout"
+          title="Cerrar sesión"
+        >
+          <LogOut className="size-5" />
         </Button>
-      </Link>
-      <Link to="/conversations">
-        <Button variant="ghost" size="icon" className="floating-menu-item">
-          <MessageSquare className="size-5" />
-        </Button>
-      </Link>
-      <Link to="/settings">
-        <Button variant="ghost" size="icon" className="floating-menu-item">
-          <Settings className="size-5" />
-        </Button>
-      </Link>
-      <Link to="/profile">
-        <Button variant="ghost" size="icon" className="floating-menu-item">
-          <User className="size-5" />
-        </Button>
-      </Link>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="floating-menu-item text-destructive"
-      >
-        <LogOut className="size-5" />
-      </Button>
-    </nav>
+      </div>
+    </aside>
   );
 }
 
 export function HomeLayout() {
   return (
     <div className="home-layout">
+      <Sidebar />
       <main className="home-main">
         <Outlet />
       </main>
-      <FloatingMenu />
     </div>
   );
 }
