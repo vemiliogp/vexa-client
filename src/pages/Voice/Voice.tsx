@@ -24,7 +24,6 @@ export function VoicePage() {
 
   useEffect(() => {
     if (isPanelOpen || messages.length > 0) {
-      // Small timeout to allow the panel transition or rendering to complete
       const timeoutId = setTimeout(scrollToBottom, 50);
       return () => clearTimeout(timeoutId);
     }
