@@ -3,14 +3,22 @@ import { type AxiosError } from "axios";
 
 import { login, type LoginPayload, type LoginResponse } from "@/services/auth";
 import { type ApiErrorResponse } from "@/services/api-client";
+import { useAuthStore } from "@/store/auth";
 
 export const useLogin = () => {
+  const setIsAuth = useAuthStore((s) => s.setIsAuth);
+  const setUser = useAuthStore((s) => s.setUser);
+
   const mutation = useMutation<
     LoginResponse,
     AxiosError<ApiErrorResponse>,
     LoginPayload
   >({
     mutationFn: login,
+    onSuccess: (data) => {
+      setIsAuth(true);
+      setUser(data.data.full_name ?? data.data.email);
+    },
   });
 
   const loginErrorMessage =

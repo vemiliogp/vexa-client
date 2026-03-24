@@ -39,3 +39,12 @@ export const register = async ({ fullName, ...rest }: RegisterPayload) => {
   });
   return data;
 };
+
+export type LogoutResponse = {
+  message: string;
+};
+
+export const logout = async () => {
+  const { data } = await apiClient.post<LogoutResponse>("/auth/logout");
+  return data;
+};

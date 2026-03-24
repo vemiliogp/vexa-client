@@ -34,6 +34,41 @@
   margin: 0;
 }
 
+.insight-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+  color: #6b7280;
+}
+
+.insight-notice svg {
+  margin-top: 1px;
+}
+
+.insight-notice p {
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.insight-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.insight-time {
+  font-size: 13px;
+  color: #9ca3af;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 @media (max-width: 900px) {
   .insights-grid {
     grid-template-columns: 1fr;

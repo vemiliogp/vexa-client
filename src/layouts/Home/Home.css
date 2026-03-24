@@ -39,6 +39,7 @@
   flex-direction: column;
   gap: 8px;
   flex: 1;
+  justify-content: center;
 }
 
 .sidebar-item {
@@ -98,7 +99,7 @@
 }
 
 .page-header-content h1 {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   color: #111827;
   margin: 0 0 4px;
@@ -113,8 +114,8 @@
 /* Connection cards grid */
 .connections-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 300px));
+  gap: 12px;
   margin-bottom: 48px;
 }
 
@@ -122,7 +123,7 @@
 .connection-card {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 20px;
+  padding: 14px;
   background: #ffffff;
   transition: box-shadow 0.2s ease;
   position: relative;
@@ -136,12 +137,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .connection-badge {
-  width: 48px;
-  height: 32px;
+  width: 36px;
+  height: 26px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   display: flex;

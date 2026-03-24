@@ -24,7 +24,6 @@ export function RecentConversations({ conversations }: RecentConversationsProps)
     <section className="section">
       <div className="section-header">
         <h2>Conversaciones Recientes</h2>
-        <Link to="/conversations">Ver todas</Link>
       </div>
 
       <div className="conversation-list">
@@ -41,7 +40,7 @@ export function RecentConversations({ conversations }: RecentConversationsProps)
               <h4>{conversation.title ?? "Sin título"}</h4>
               <p>{conversation.context}</p>
             </div>
-            <p className="conversation-model">{formatTime(conversation.created_at)}</p>
+            <p className="conversation-model font-semibold">{formatTime(conversation.created_at)}</p>
           </Link>
         ))}
       </div>

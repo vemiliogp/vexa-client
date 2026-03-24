@@ -42,3 +42,20 @@ export const deleteConnection = async (id: number) => {
   const { data } = await apiClient.delete(`/connection/${id}`);
   return data;
 };
+
+export interface CheckConnectionPayload {
+  url: string;
+}
+
+export interface CheckConnectionResponse {
+  success: boolean;
+  message: string;
+}
+
+export const checkConnection = async (payload: CheckConnectionPayload) => {
+  const { data } = await apiClient.post<CheckConnectionResponse>(
+    "/connection/check",
+    payload,
+  );
+  return data;
+};

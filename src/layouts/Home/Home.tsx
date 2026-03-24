@@ -1,18 +1,21 @@
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Navigate, Outlet, useLocation } from "react-router";
 import { LogOut, Network, Sparkles, Zap, AudioLines } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useLogout } from "./useLogout";
+import { useAuthStore } from "@/store/auth";
 
 import "./Home.css";
 
 const navItems = [
   { to: "/connections", icon: Network, label: "Conexiones" },
-  { to: "/conversations", icon: AudioLines, label: "Conversaciones" },
+  { to: "/voice", icon: AudioLines, label: "Conversaciones" },
   { to: "/insights", icon: Sparkles, label: "Insights" }
 ];
 
 function Sidebar() {
   const location = useLocation();
+  const { logout, isPending } = useLogout();
 
   return (
     <aside className="sidebar">
@@ -46,6 +49,8 @@ function Sidebar() {
           size="icon"
           className="sidebar-item sidebar-item-logout"
           title="Cerrar sesión"
+          onClick={() => logout()}
+          disabled={isPending}
         >
           <LogOut className="size-5" />
         </Button>
@@ -55,6 +60,12 @@ function Sidebar() {
 }
 
 export function HomeLayout() {
+  const isAuth = useAuthStore((s) => s.isAuth);
+
+  if (!isAuth) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="home-layout">
       <Sidebar />

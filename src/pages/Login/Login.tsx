@@ -34,18 +34,14 @@ export const LoginPage = () => {
   const onSubmit = async (values: LoginValues) => {
     const result = await login(values);
     if (result) {
-      navigate("/connections");
+      void navigate("/connections");
     }
   };
 
   return (
     <div className="page">
       <aside className="panel-left">
-        <div className="brand">
-          <span>Vexa</span>
-        </div>
-
-        <div>
+        <div className="mt-auto">
           <p className="quote">
             "Todo debe hacerse tan simple como sea posible, pero no más simple."
           </p>
@@ -68,7 +64,7 @@ export const LoginPage = () => {
 
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
               className="flex flex-col gap-4"
             >
               <FormField

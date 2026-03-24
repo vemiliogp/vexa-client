@@ -41,11 +41,7 @@ export const RegisterPage = () => {
   return (
     <div className="page">
       <aside className="panel-left">
-        <div className="brand">
-          <span>Vexa</span>
-        </div>
-
-        <div>
+        <div className="mt-auto">
           <p className="quote">
             "La simplicidad es la maxima sofisticacion."
           </p>
@@ -65,7 +61,7 @@ export const RegisterPage = () => {
 
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
               className="flex flex-col gap-4"
             >
               <FormField
