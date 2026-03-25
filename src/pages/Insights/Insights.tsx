@@ -2,13 +2,6 @@ import { useState } from "react";
 import { Lightbulb, Plus, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-  EmptyDescription,
-} from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInsights } from "./useInsights";
 import { GenerateInsightsDialog } from "./GenerateInsightsDialog";
@@ -53,22 +46,27 @@ export function InsightsPage() {
 
   if (insights.length === 0 && generatingCount === 0) {
     return (
-      <div className="insights-page">
-        <Empty className="border border-solid">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Lightbulb className="size-6" />
-            </EmptyMedia>
-            <EmptyTitle>No hay insights disponibles</EmptyTitle>
-            <EmptyDescription>
-              Genera tu primer insight a partir del análisis de tus datos.
-            </EmptyDescription>
-          </EmptyHeader>
+      <div className="insights-page insights-page-empty">
+        <div className="empty-state">
+          <div className="empty-state-visual">
+            <div className="empty-chart">
+              <div className="empty-bar empty-bar-1" />
+              <div className="empty-bar empty-bar-2" />
+              <div className="empty-bar empty-bar-3" />
+              <div className="empty-bar empty-bar-4" />
+              <div className="empty-bar empty-bar-5" />
+              <div className="empty-chart-icon"><Lightbulb className="size-4" /></div>
+            </div>
+          </div>
+          <div className="empty-state-text">
+            <h2>Sin hallazgos aún</h2>
+            <p>El agente analítico escaneará tu base de datos en busca de patrones, anomalías y oportunidades relevantes.</p>
+          </div>
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="size-4" />
-            Generar insights
+            Analizar datos
           </Button>
-        </Empty>
+        </div>
         <GenerateInsightsDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
@@ -83,8 +81,8 @@ export function InsightsPage() {
     <div className="insights-page">
       <div className="page-header-content mb-8">
         <h1>Insights</h1>
-        <p>Hallazgos generados automáticamente a partir de tus datos.</p>
-        <div className="flex justify-end mt-12">
+        <p>Hallazgos detectados automáticamente por el agente analítico.</p>
+        <div className="flex justify-end mt-8">
           <Button
             onClick={() => setDialogOpen(true)}
             disabled={generatingCount > 0}
@@ -98,7 +96,7 @@ export function InsightsPage() {
       {generatingCount === 0 && insights.length > 0 && (
         <div className="insight-notice">
           <Clock className="size-4 shrink-0" />
-          <p>Si generaste insights recientemente, aparecerán aquí en cuanto el proceso termine.</p>
+          <p>El análisis puede tardar unos minutos. Los hallazgos aparecerán aquí al terminar.</p>
         </div>
       )}
 
@@ -113,7 +111,9 @@ export function InsightsPage() {
             {insight.created_at && (
               <div className="insight-footer">
                 <span className="insight-time">
-                  {new Date(insight.created_at).toLocaleTimeString("es-MX", {
+                  {new Date(insight.created_at).toLocaleString("es-MX", {
+                    day: "2-digit",
+                    month: "short",
                     hour: "2-digit",
                     minute: "2-digit",
                   })}

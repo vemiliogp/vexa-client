@@ -7,9 +7,11 @@ interface RecentConversationsProps {
   conversations: Conversation[];
 }
 
-function formatTime(dateString: string): string {
+function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleTimeString("es-MX", {
+  return date.toLocaleString("es-MX", {
+    day: "2-digit",
+    month: "short",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -40,7 +42,7 @@ export function RecentConversations({ conversations }: RecentConversationsProps)
               <h4>{conversation.title ?? "Sin título"}</h4>
               <p>{conversation.context}</p>
             </div>
-            <p className="conversation-model font-semibold">{formatTime(conversation.created_at)}</p>
+            <p className="conversation-model font-semibold">{formatDate(conversation.created_at)}</p>
           </Link>
         ))}
       </div>

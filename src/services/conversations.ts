@@ -1,5 +1,24 @@
 import { apiClient } from "./api-client";
 
+export type ConversationModel = "deepseek/r1" | "openai/gpt-5" | "openai/gpt-oss";
+
+export interface CreateConversationPayload {
+  model: ConversationModel;
+  title?: string;
+  context?: string;
+  connection_id?: number;
+}
+
+export interface CreateConversationResponse {
+  data: Conversation;
+  message: string;
+}
+
+export const createConversation = async (payload: CreateConversationPayload) => {
+  const { data } = await apiClient.post<CreateConversationResponse>("/conversation", payload);
+  return data;
+};
+
 export interface Conversation {
   id: number;
   title: string | null;
@@ -20,6 +39,7 @@ export interface Message {
     role: "user" | "assistant";
     content: string;
   };
+  created_at: string;
 }
 
 export interface MessagesResponse {

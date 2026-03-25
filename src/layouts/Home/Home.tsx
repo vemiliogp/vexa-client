@@ -9,8 +9,8 @@ import "./Home.css";
 
 const navItems = [
   { to: "/connections", icon: Network, label: "Conexiones" },
-  { to: "/voice", icon: AudioLines, label: "Conversaciones" },
-  { to: "/insights", icon: Sparkles, label: "Insights" }
+  { to: "/conversations", icon: AudioLines, label: "Conversaciones" },
+  { to: "/insights", icon: Sparkles, label: "Insights" },
 ];
 
 function Sidebar() {
@@ -27,7 +27,8 @@ function Sidebar() {
 
       <nav className="sidebar-nav">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.to;
+          const isActive = location.pathname === item.to ||
+            (item.to === "/conversations" && location.pathname.startsWith("/conversations"));
           return (
             <Link key={item.to} to={item.to}>
               <Button
@@ -49,7 +50,7 @@ function Sidebar() {
           size="icon"
           className="sidebar-item sidebar-item-logout"
           title="Cerrar sesión"
-          onClick={() => logout()}
+          onClick={() => { logout(); }}
           disabled={isPending}
         >
           <LogOut className="size-5" />

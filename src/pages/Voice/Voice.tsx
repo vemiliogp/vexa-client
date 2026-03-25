@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Mic, MicOff, PhoneOff, MessageSquare, X, Loader2 } from "lucide-react";
+import { Mic, MicOff, PhoneOff, MessageSquare, X, Loader2, Copy, Check, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useVoiceSession } from "./useVoiceSession";
 import { VoiceCircle } from "./VoiceCircle";
 import { getConversationMessages, type Message } from "@/services/conversations";
+import { useConversations } from "@/pages/Conversations/useConversations";
 
 import "./Voice.css";
 
@@ -14,9 +15,14 @@ export function VoicePage() {
   const { id: conversationId } = useParams<{ id: string }>();
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { conversations } = useConversations();
+  const conversation = conversations.find((c) => String(c.id) === conversationId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -73,6 +79,12 @@ export function VoicePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
+  const handleCopy = (message: Message) => {
+    navigator.clipboard.writeText(message.content.content);
+    setCopiedId(message.id);
+    setTimeout(() => { setCopiedId(null); }, 2000);
+  };
+
   const handleEndSession = () => {
     stopSession();
     navigate("/connections");
@@ -91,18 +103,68 @@ export function VoicePage() {
   };
 
   const getStatusText = () => {
-    if (isSending) return "Enviando...";
-    if (isPlaying) return "Reproduciendo respuesta...";
+    if (isSending) return "Procesando consulta...";
+    if (isPlaying) return "Respondiendo...";
     if (isRecording) return "Escuchando...";
-    return "Listo";
+    return "Listo para escuchar";
   };
 
   return (
     <div className="voice-page">
+      {/* Info Panel */}
+      <div className={`messages-panel ${isInfoOpen ? "messages-panel-open" : ""}`}>
+        <div className="messages-panel-header">
+          <h3>Información</h3>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="messages-panel-close"
+            onClick={() => { setIsInfoOpen(false); }}
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
+        <div className="messages-panel-content">
+          {conversation ? (
+            <div className="info-list">
+              <div className="info-item">
+                <span className="info-label">Modelo</span>
+                <span className="info-value">{conversation.model}</span>
+              </div>
+              {conversation.title && (
+                <div className="info-item">
+                  <span className="info-label">Título</span>
+                  <span className="info-value">{conversation.title}</span>
+                </div>
+              )}
+              {conversation.context && (
+                <div className="info-item">
+                  <span className="info-label">Contexto</span>
+                  <span className="info-value">{conversation.context}</span>
+                </div>
+              )}
+              <div className="info-item">
+                <span className="info-label">Creada</span>
+                <span className="info-value">
+                  {new Date(conversation.created_at).toLocaleString("es-MX", {
+                    day: "2-digit",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="messages-empty">Sin información</div>
+          )}
+        </div>
+      </div>
+
       {/* Messages Panel */}
       <div className={`messages-panel ${isPanelOpen ? "messages-panel-open" : ""}`}>
         <div className="messages-panel-header">
-          <h3>Mensajes</h3>
+          <h3>Transcripción</h3>
           <Button
             variant="ghost"
             size="icon"
@@ -116,17 +178,35 @@ export function VoicePage() {
           {isLoadingMessages ? (
             <div className="messages-loading">Cargando mensajes...</div>
           ) : messages.length === 0 ? (
-            <div className="messages-empty">No hay mensajes</div>
+            <div className="messages-empty">Aún no hay consultas en esta sesión</div>
           ) : (
             messages.map((message) => (
-              <div
-                key={message.id}
-                className={`message-item message-${message.content.role}`}
-              >
-                <div className="message-role">
-                  {message.content.role === "user" ? "Tú" : "Asistente"}
+              <div key={message.id} className={`message-row message-row-${message.content.role}`}>
+                <div className={`message-item message-${message.content.role}`}>
+                  <div className="message-meta">
+                    <span className="message-role">
+                      {message.content.role === "user" ? "Tú" : "Agente"}
+                    </span>
+                    <span className="message-time">
+                      {new Date(message.created_at).toLocaleTimeString("es-MX", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                  <div className="message-content">{message.content.content}</div>
                 </div>
-                <div className="message-content">{message.content.content}</div>
+                {message.content.role === "assistant" && (
+                  <button
+                    className="message-copy"
+                    onClick={() => { handleCopy(message); }}
+                    title="Copiar"
+                  >
+                    {copiedId === message.id
+                      ? <Check className="size-3" />
+                      : <Copy className="size-3" />}
+                  </button>
+                )}
               </div>
             ))
           )}
@@ -134,11 +214,24 @@ export function VoicePage() {
         </div>
       </div>
 
-      <div className="voice-status">
-        <span className={`voice-status-dot ${isSending || isPlaying ? "voice-status-dot-processing" : ""}`} />
-        <span className="voice-status-text">
-          {isListening ? "SESIÓN DE VOZ ACTIVA" : "INICIANDO SESIÓN"}
-        </span>
+      <div className="voice-status-group">
+        {conversation?.title && (
+          <h2 className="voice-conversation-title">{conversation.title}</h2>
+        )}
+        <div className="voice-status">
+          <span className={`voice-status-dot ${isSending || isPlaying ? "voice-status-dot-processing" : ""}`} />
+          <span className="voice-status-text">
+            {isListening ? "AGENTE ACTIVO" : "CONECTANDO"}
+          </span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={`voice-info-btn ${isInfoOpen ? "voice-control-active" : ""}`}
+          onClick={() => { setIsInfoOpen(!isInfoOpen); }}
+        >
+          <Info className="size-4" />
+        </Button>
       </div>
 
       <div className="voice-main">
@@ -148,11 +241,11 @@ export function VoicePage() {
           <h2>{getStatusText()}</h2>
           <p>
             {isRecording
-              ? "Presiona el micrófono para enviar"
+              ? "Suelta para enviar tu consulta"
               : isSending
-                ? "Procesando tu mensaje..."
+                ? "El agente está procesando..."
                 : isPlaying
-                  ? "Escucha la respuesta"
+                  ? "Escucha la respuesta del agente"
                   : "Presiona el micrófono para hablar"}
           </p>
         </div>
@@ -192,6 +285,7 @@ export function VoicePage() {
         >
           <MessageSquare className="size-5" />
         </Button>
+
       </div>
     </div>
   );

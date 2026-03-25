@@ -97,7 +97,7 @@ export function CreateConnectionDialog({
         <DialogHeader>
           <DialogTitle>Nueva conexión</DialogTitle>
           <DialogDescription>
-            Configura los datos de tu conexión a base de datos.
+            Registra una base de datos PostgreSQL para que el agente pueda acceder y consultarla.
           </DialogDescription>
         </DialogHeader>
 

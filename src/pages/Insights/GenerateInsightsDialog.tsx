@@ -52,15 +52,15 @@ export function GenerateInsightsDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Generar insights</DialogTitle>
+          <DialogTitle>Analizar datos</DialogTitle>
           <DialogDescription>
-            Selecciona cuántos insights generar y la conexión a analizar.
+            El agente escaneará la base de datos seleccionada en busca de hallazgos relevantes.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 py-1">
           <div className="space-y-2">
-            <p className="text-sm font-medium">Cantidad</p>
+            <p className="text-sm font-medium">Número de hallazgos</p>
             <div className="flex gap-2 justify-center">
               {COUNTS.map((n) => (
                 <button
@@ -79,30 +79,34 @@ export function GenerateInsightsDialog({
             </div>
           </div>
 
-          {connections.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Conexión</p>
-              <select
-                className="field"
-                value={connectionId ?? ""}
-                onChange={(e) =>
-                  setConnectionId(e.target.value ? Number(e.target.value) : undefined)
-                }
-              >
-                <option value="">Sin conexión específica</option>
-                {connections.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Conexión</p>
+            <select
+              className="field"
+              value={connectionId ?? ""}
+              disabled={connections.length === 0}
+              onChange={(e) =>
+                setConnectionId(e.target.value ? Number(e.target.value) : undefined)
+              }
+            >
+              <option value="">Selecciona una conexión</option>
+              {connections.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            {connections.length === 0 && (
+              <p className="text-sm text-amber-600">
+                No tienes conexiones configuradas. Añade una base de datos primero.
+              </p>
+            )}
+          </div>
 
           <div className="flex items-start gap-2 rounded-md bg-muted p-3">
             <Clock className="size-4 text-muted-foreground mt-0.5 shrink-0" />
             <p className="text-sm text-muted-foreground">
-              La generación puede tomar varios minutos dependiendo de la complejidad de los datos.
+              El análisis puede tardar varios minutos. Puedes seguir usando la app mientras tanto.
             </p>
           </div>
 
@@ -118,7 +122,7 @@ export function GenerateInsightsDialog({
             Cancelar
           </Button>
           <Button type="button" onClick={() => void handleSubmit()} disabled={!connectionId}>
-            Generar
+            Analizar
           </Button>
         </DialogFooter>
       </DialogContent>
