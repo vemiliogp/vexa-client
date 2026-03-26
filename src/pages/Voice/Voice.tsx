@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Mic, MicOff, PhoneOff, MessageSquare, X, Loader2, Copy, Check, Info } from "lucide-react";
+import { Mic, MicOff, PhoneOff, MessageSquare, X, Loader2, Copy, Check, Info, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useVoiceSession } from "./useVoiceSession";
 import { VoiceCircle } from "./VoiceCircle";
-import { getConversationMessages, type Message } from "@/services/conversations";
+import { getConversationMessages, sendTextMessage, type Message } from "@/services/conversations";
 import { useConversations } from "@/pages/Conversations/useConversations";
 
 import "./Voice.css";
@@ -19,6 +19,8 @@ export function VoicePage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [textMessage, setTextMessage] = useState("");
+  const [isSendingText, setIsSendingText] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { conversations } = useConversations();
@@ -78,6 +80,22 @@ export function VoicePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
+
+  const handleSendText = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!textMessage.trim() || !conversationId || isSendingText) return;
+    const text = textMessage.trim();
+    setTextMessage("");
+    setIsSendingText(true);
+    try {
+      await sendTextMessage(conversationId, text);
+      loadMessages();
+    } catch (error) {
+      console.error("Error sending text message:", error);
+    } finally {
+      setIsSendingText(false);
+    }
+  };
 
   const handleCopy = (message: Message) => {
     navigator.clipboard.writeText(message.content.content);
@@ -212,6 +230,25 @@ export function VoicePage() {
           )}
           <div ref={messagesEndRef} />
         </div>
+        <form className="message-input-form" onSubmit={(e) => { void handleSendText(e); }}>
+          <div className="message-input-wrapper">
+            <input
+              className="message-input"
+              type="text"
+              placeholder="Escribe una consulta..."
+              value={textMessage}
+              onChange={(e) => { setTextMessage(e.target.value); }}
+              disabled={isSendingText}
+            />
+            <button
+              className="message-send-btn"
+              type="submit"
+              disabled={!textMessage.trim() || isSendingText}
+            >
+              {isSendingText ? <Loader2 className="size-3 animate-spin" /> : <Send className="size-3" />}
+            </button>
+          </div>
+        </form>
       </div>
 
       <div className="voice-status-group">

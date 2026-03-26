@@ -108,8 +108,11 @@ export function InsightsPage() {
           <article key={insight.id} className="insight-card">
             <h3>{insight.title}</h3>
             <p>{insight.description}</p>
-            {insight.created_at && (
-              <div className="insight-footer">
+            <div className="insight-footer">
+              {insight.connection_name && (
+                <span className="insight-connection">{insight.connection_name}</span>
+              )}
+              {insight.created_at && (
                 <span className="insight-time">
                   {new Date(insight.created_at).toLocaleString("es-MX", {
                     day: "2-digit",
@@ -118,8 +121,8 @@ export function InsightsPage() {
                     minute: "2-digit",
                   })}
                 </span>
-              </div>
-            )}
+              )}
+            </div>
           </article>
         ))}
       </div>

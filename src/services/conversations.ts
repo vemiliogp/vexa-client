@@ -64,6 +64,19 @@ export interface AudioMessageResponse {
   message: string;
 }
 
+export interface TextMessageResponse {
+  response: string;
+  message: string;
+}
+
+export const sendTextMessage = async (conversationId: string, message: string) => {
+  const { data } = await apiClient.post<TextMessageResponse>(
+    `/conversation/${conversationId}/message/text`,
+    { message }
+  );
+  return data;
+};
+
 export const sendAudioMessage = async (conversationId: string, audioBlob: Blob) => {
   const formData = new FormData();
   formData.append("file", audioBlob, "audio.mp3");

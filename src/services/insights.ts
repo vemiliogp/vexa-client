@@ -5,6 +5,8 @@ export interface Insight {
   title: string;
   description: string;
   created_at: string | null;
+  connection_id: number | null;
+  connection_name: string | null;
 }
 
 export interface InsightsResponse {
@@ -20,6 +22,7 @@ export const getInsights = async () => {
 export interface CreateInsightsPayload {
   count: number;
   connection_id?: number;
+  delivery_method?: "email" | "in_app";
 }
 
 export interface CreateInsightsResponse {

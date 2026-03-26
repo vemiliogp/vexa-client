@@ -30,13 +30,14 @@ export function GenerateInsightsDialog({
 }: GenerateInsightsDialogProps) {
   const [count, setCount] = useState(1);
   const [connectionId, setConnectionId] = useState<number | undefined>();
+  const [deliveryMethod, setDeliveryMethod] = useState<"email" | "in_app">("in_app");
   const { connections } = useConnections();
   const { generate, isPending, errorMessage } = useGenerateInsights();
 
   const handleSubmit = async () => {
     onGenerating(count);
     onOpenChange(false);
-    await generate({ count, connection_id: connectionId });
+    await generate({ count, connection_id: connectionId, delivery_method: deliveryMethod });
     onDone();
   };
 
@@ -44,6 +45,7 @@ export function GenerateInsightsDialog({
     if (!isPending) {
       setCount(1);
       setConnectionId(undefined);
+      setDeliveryMethod("in_app");
       onOpenChange(value);
     }
   };
@@ -101,6 +103,26 @@ export function GenerateInsightsDialog({
                 No tienes conexiones configuradas. Añade una base de datos primero.
               </p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Recibir resultados</p>
+            <div className="flex gap-2">
+              {(["in_app", "email"] as const).map((method) => (
+                <button
+                  key={method}
+                  type="button"
+                  onClick={() => setDeliveryMethod(method)}
+                  className={`flex-1 h-10 rounded-md border text-sm font-medium transition-colors ${
+                    deliveryMethod === method
+                      ? "bg-foreground text-background border-foreground"
+                      : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
+                  }`}
+                >
+                  {method === "in_app" ? "En la app" : "Email"}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-start gap-2 rounded-md bg-muted p-3">
