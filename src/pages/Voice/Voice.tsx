@@ -86,12 +86,21 @@ export function VoicePage() {
     if (!textMessage.trim() || !conversationId || isSendingText) return;
     const text = textMessage.trim();
     setTextMessage("");
+
+    const optimisticMessage: Message = {
+      id: Date.now(),
+      content: { role: "user", content: text },
+      created_at: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, optimisticMessage]);
+
     setIsSendingText(true);
     try {
       await sendTextMessage(conversationId, text);
       loadMessages();
     } catch (error) {
       console.error("Error sending text message:", error);
+      setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
     } finally {
       setIsSendingText(false);
     }
