@@ -12,8 +12,8 @@ Aplicación frontend construida con **React 19**, **TypeScript**, **Vite** y **T
 1. **Clonar el repositorio:**
 
    ```bash
-   git clone <repository-url>
-   cd client
+   git clone https://github.com/vemiliogp/vexa-client.git
+   cd vexa-client
    ```
 
 2. **Instalar dependencias:**
