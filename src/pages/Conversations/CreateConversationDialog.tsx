@@ -23,7 +23,7 @@ import { useCreateConversation } from "./useCreateConversation";
 import { useConnections } from "@/pages/Connections/useConnections";
 
 const conversationSchema = z.object({
-  model: z.enum(["deepseek/r1", "openai/gpt-5", "openai/gpt-oss"]),
+  model: z.enum(["deepseek/r1", "openai/gpt-5", "openai/gpt-oss", "ollama/deepseek-r1:14b"]),
   connection_id: z.string().min(1, { message: "Selecciona una conexión" }),
   title: z.string().max(50).optional(),
   context: z.string().optional(),
@@ -91,6 +91,7 @@ export function CreateConversationDialog({
                       <option value="openai/gpt-5">OpenAI GPT-5</option>
                       <option value="openai/gpt-oss">OpenAI GPT OSS</option>
                       <option value="deepseek/r1">DeepSeek R1</option>
+                      <option value="ollama/deepseek-r1:14b">Ollama DeepSeek R1 14B</option>
                     </select>
                   </FormControl>
                   <FormMessage />

@@ -23,6 +23,7 @@ export interface CreateInsightsPayload {
   count: number;
   connection_id?: number;
   delivery_method?: "email" | "in_app";
+  model?: string;
 }
 
 export interface CreateInsightsResponse {

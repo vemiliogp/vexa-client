@@ -31,13 +31,14 @@ export function GenerateInsightsDialog({
   const [count, setCount] = useState(1);
   const [connectionId, setConnectionId] = useState<number | undefined>();
   const [deliveryMethod, setDeliveryMethod] = useState<"email" | "in_app">("in_app");
+  const [model, setModel] = useState("openai/gpt-oss");
   const { connections } = useConnections();
   const { generate, isPending, errorMessage } = useGenerateInsights();
 
   const handleSubmit = async () => {
     onGenerating(count);
     onOpenChange(false);
-    await generate({ count, connection_id: connectionId, delivery_method: deliveryMethod });
+    await generate({ count, connection_id: connectionId, delivery_method: deliveryMethod, model });
     onDone();
   };
 
@@ -46,6 +47,7 @@ export function GenerateInsightsDialog({
       setCount(1);
       setConnectionId(undefined);
       setDeliveryMethod("in_app");
+      setModel("openai/gpt-oss");
       onOpenChange(value);
     }
   };
@@ -103,6 +105,20 @@ export function GenerateInsightsDialog({
                 No tienes conexiones configuradas. Añade una base de datos primero.
               </p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Modelo</p>
+            <select
+              className="field"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+            >
+              <option value="openai/gpt-5">OpenAI GPT-5</option>
+              <option value="openai/gpt-oss">OpenAI GPT OSS</option>
+              <option value="deepseek/r1">DeepSeek R1</option>
+              <option value="ollama/deepseek-r1:14b">Ollama DeepSeek R1 14B</option>
+            </select>
           </div>
 
           <div className="space-y-2">

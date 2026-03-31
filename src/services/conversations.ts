@@ -1,6 +1,6 @@
 import { apiClient } from "./api-client";
 
-export type ConversationModel = "deepseek/r1" | "openai/gpt-5" | "openai/gpt-oss";
+export type ConversationModel = "deepseek/r1" | "openai/gpt-5" | "openai/gpt-oss" | "ollama/deepseek-r1:14b";
 
 export interface CreateConversationPayload {
   model: ConversationModel;
